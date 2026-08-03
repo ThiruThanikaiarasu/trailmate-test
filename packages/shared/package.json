@@ -1,0 +1,12 @@
+{
+  "name": "@trailmate/shared",
+  "version": "1.4.0",
+  "private": true,
+  "description": "Types and date, geo, unit and money helpers shared by the TrailMate API and web app.",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  }
+}
