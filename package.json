@@ -1,0 +1,46 @@
+{
+  "name": "trailmate",
+  "version": "1.4.0",
+  "private": true,
+  "description": "Plan hiking trips together: itineraries, gear, costs and shareable trip pages.",
+  "workspaces": [
+    "packages/shared",
+    "apps/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev:api": "npm run dev -w @trailmate/api",
+    "dev:web": "npm run dev -w @trailmate/web",
+    "seed": "npm run seed -w @trailmate/api",
+    "build": "npm run build -w @trailmate/web",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test:api && npm run test:unit",
+    "test:api": "jest --config apps/api/jest.config.cjs",
+    "test:unit": "vitest run",
+    "generate:types": "npm run generate:types -w @trailmate/api"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^22.10.0",
+    "@types/supertest": "^6.0.2",
+    "@vitejs/plugin-react": "^6.1.2",
+    "jest": "^30.0.0",
+    "jsdom": "^27.0.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.4.0",
+    "tsx": "^4.19.2",
+    "typescript": "~5.7.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "overrides": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
