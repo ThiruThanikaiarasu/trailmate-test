@@ -1,0 +1,25 @@
+{
+  "name": "@trailmate/api",
+  "version": "1.4.0",
+  "private": true,
+  "description": "TrailMate REST API (Express + SQLite).",
+  "main": "src/server.ts",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts",
+    "seed": "tsx scripts/seed.ts",
+    "generate:types": "tsx scripts/generate-api-types.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "jest --config jest.config.cjs"
+  },
+  "dependencies": {
+    "@trailmate/shared": "1.4.0",
+    "better-sqlite3": "^13.0.0",
+    "express": "^5.1.0",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/express": "^5.0.0"
+  }
+}
