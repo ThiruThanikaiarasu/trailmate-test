@@ -59,6 +59,14 @@ const MIGRATIONS: readonly string[] = [
      created_at TEXT NOT NULL
    );
    CREATE INDEX expenses_trip ON expenses(trip_id);`,
+
+  `CREATE TABLE share_links (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     trip_id INTEGER NOT NULL REFERENCES trips(id) ON DELETE CASCADE,
+     token TEXT NOT NULL UNIQUE,
+     expires_at INTEGER NOT NULL,
+     created_at INTEGER NOT NULL
+   );`,
 ];
 
 export function migrate(db: Database.Database): void {

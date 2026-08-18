@@ -4,7 +4,11 @@ import { openDatabase } from './db/database';
 
 const config = loadConfig();
 const db = openDatabase(config.databaseFile);
-const app = createApp({ db });
+const app = createApp({
+  db,
+  publicBaseUrl: config.publicBaseUrl,
+  defaultShareTtlHours: config.defaultShareTtlHours,
+});
 
 const server = app.listen(config.port, () => {
   console.log(`TrailMate API listening on http://localhost:${config.port}`);

@@ -4,6 +4,7 @@ import { apiErrorSchema } from '../schemas/common';
 import { costShareSchema, costSplitSchema, createExpenseSchema, expenseSchema } from '../schemas/expense';
 import { createGearItemSchema, gearCategories, gearItemSchema, updateGearItemSchema } from '../schemas/gear';
 import { createParticipantSchema, participantSchema } from '../schemas/participant';
+import { createShareLinkSchema, sharedTripSchema, shareLinkSchema } from '../schemas/share';
 import { createTripSchema, tripDetailSchema, tripSchema, updateTripSchema } from '../schemas/trip';
 
 export interface NamedSchema {
@@ -42,4 +43,7 @@ export const apiSchemas: readonly NamedSchema[] = [
   { name: 'CreateExpenseRequest', schema: createExpenseSchema, io: 'input' },
   { name: 'CostShare', schema: costShareSchema, io: 'output' },
   { name: 'CostSplit', schema: costSplitSchema, io: 'output' },
+  { name: 'ShareLink', schema: shareLinkSchema, io: 'output' },
+  { name: 'CreateShareLinkRequest', schema: createShareLinkSchema, io: 'input' },
+  { name: 'SharedTrip', schema: sharedTripSchema, io: 'output' },
 ];

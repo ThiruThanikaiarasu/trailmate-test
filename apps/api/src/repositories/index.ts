@@ -3,6 +3,7 @@ import { DayRepository } from './dayRepository';
 import { ExpenseRepository } from './expenseRepository';
 import { GearRepository } from './gearRepository';
 import { ParticipantRepository } from './participantRepository';
+import { ShareLinkRepository } from './shareLinkRepository';
 import { TripRepository } from './tripRepository';
 
 export interface Repositories {
@@ -11,6 +12,7 @@ export interface Repositories {
   days: DayRepository;
   gear: GearRepository;
   expenses: ExpenseRepository;
+  shareLinks: ShareLinkRepository;
 }
 
 export function createRepositories(db: Db): Repositories {
@@ -20,5 +22,6 @@ export function createRepositories(db: Db): Repositories {
     days: new DayRepository(db),
     gear: new GearRepository(db),
     expenses: new ExpenseRepository(db),
+    shareLinks: new ShareLinkRepository(db),
   };
 }

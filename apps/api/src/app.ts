@@ -1,5 +1,5 @@
 import express, { type Express } from 'express';
-import { type Clock, systemClock } from './clock';
+import { type Clock, randomToken, systemClock, type TokenGenerator } from './clock';
 import type { Db } from './db/database';
 import { createErrorHandler, notFoundHandler } from './middleware/errorHandler';
 import { daysRouter } from './routes/days';
@@ -7,18 +7,30 @@ import { expensesRouter } from './routes/expenses';
 import { gearRouter } from './routes/gear';
 import { healthRouter } from './routes/health';
 import { participantsRouter } from './routes/participants';
+import { shareRouter } from './routes/share';
 import { tripsRouter } from './routes/trips';
 import { createServices } from './services';
 
 export interface AppOptions {
   db: Db;
   clock?: Clock;
+  newToken?: TokenGenerator;
+  publicBaseUrl?: string;
+  defaultShareTtlHours?: number;
   log?: (message: string, error: unknown) => void;
 }
 
 export function createApp(options: AppOptions): Express {
   const clock = options.clock ?? systemClock;
-  const services = createServices({ db: options.db, clock });
+  const services = createServices({
+    db: options.db,
+    clock,
+    newToken: options.newToken ?? randomToken,
+    share: {
+      publicBaseUrl: options.publicBaseUrl ?? 'http://localhost:5173',
+      defaultTtlHours: options.defaultShareTtlHours ?? 72,
+    },
+  });
 
   const app = express();
   app.disable('x-powered-by');
@@ -31,6 +43,7 @@ export function createApp(options: AppOptions): Express {
   api.use(gearRouter(services));
   api.use(participantsRouter(services));
   api.use(expensesRouter(services));
+  api.use(shareRouter(services));
   app.use('/api', api);
 
   app.use(notFoundHandler);

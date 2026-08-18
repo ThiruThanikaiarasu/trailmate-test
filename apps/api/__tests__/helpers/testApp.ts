@@ -30,9 +30,12 @@ export interface TestContext {
 export function createTestContext(start = '2026-06-01T09:00:00.000Z'): TestContext {
   const db = openDatabase(':memory:');
   const clock = new ManualClock(start);
+  let tokens = 0;
   const app = createApp({
     db,
     clock,
+    newToken: () => `token-${++tokens}`,
+    publicBaseUrl: 'https://trailmate.test',
     log: () => undefined,
   });
   return { app, db, clock, api: request(app) };

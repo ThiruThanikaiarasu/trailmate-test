@@ -175,3 +175,39 @@ export interface CostSplit {
     balanceCents: number;
   }>;
 }
+
+export interface ShareLink {
+  token: string;
+  url: string;
+  expiresAt: string;
+}
+
+export interface CreateShareLinkRequest {
+  ttlHours?: number;
+}
+
+export interface SharedTrip {
+  name: string;
+  region: string;
+  startDate: string;
+  endDate: string;
+  days: Array<{
+    id: number;
+    tripId: number;
+    dayNumber: number;
+    date: string;
+    title: string;
+    notes: string | null;
+    waypoints: Array<{
+      id: number;
+      seq: number;
+      name: string;
+      lat: number;
+      lon: number;
+      elevationM: number | null;
+    }>;
+    distanceMeters: number;
+    gainM: number;
+    lossM: number;
+  }>;
+}
