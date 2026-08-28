@@ -46,4 +46,11 @@ export class GearService {
   remove(id: number): void {
     if (!this.repos.gear.delete(id)) throw notFound('Gear item');
   }
+
+  /** Total pack weight in grams, counting quantity. Items without a weight count as zero. */
+  packWeightGrams(tripId: number): number {
+    return this.repos.gear
+      .listByTrip(tripId)
+      .reduce((sum, item) => sum + (item.weight_grams ?? 0) * item.quantity, 0);
+  }
 }

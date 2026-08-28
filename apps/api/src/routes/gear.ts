@@ -10,6 +10,10 @@ export function gearRouter({ gear }: Services): Router {
     res.json(gear.list(idParam(req.params.id)));
   });
 
+  router.get('/trips/:id/gear/weight', (req, res) => {
+    res.json({ totalGrams: gear.packWeightGrams(idParam(req.params.id)) });
+  });
+
   router.post('/trips/:id/gear', validateBody(createGearItemSchema), (req, res) => {
     res.status(201).json(gear.add(idParam(req.params.id), req.body));
   });

@@ -36,6 +36,14 @@ describe('gear API', () => {
     expect(trip.body).toMatchObject({ gearCount: 1, packedCount: 1 });
   });
 
+  it('sums the pack weight including quantities', async () => {
+    await ctx.api.post(`/api/trips/${tripId}/gear`).send({ name: 'Bottle', category: 'water', weightGrams: 180, quantity: 2 });
+    await ctx.api.post(`/api/trips/${tripId}/gear`).send({ name: 'Quilt', category: 'sleep', weightGrams: 640 });
+    await ctx.api.post(`/api/trips/${tripId}/gear`).send({ name: 'Socks', category: 'clothing' });
+    const res = await ctx.api.get(`/api/trips/${tripId}/gear/weight`).expect(200);
+    expect(res.body).toEqual({ totalGrams: 1000 });
+  });
+
   it('deletes an item', async () => {
     const item = await ctx.api.post(`/api/trips/${tripId}/gear`).send({ name: 'Mug', category: 'cooking' });
     await ctx.api.delete(`/api/gear/${item.body.id}`).expect(204);
