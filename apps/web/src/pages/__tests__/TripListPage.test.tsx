@@ -31,6 +31,15 @@ describe('TripListPage', () => {
     expect(fetchMock).toHaveBeenCalledWith('/api/trips', expect.objectContaining({ method: 'GET' }));
   });
 
+  it('shows the API error message', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(jsonResponse({ error: { code: 'INTERNAL_ERROR', message: 'Database is locked' } }, 500)),
+    );
+    renderWithProviders(<TripListPage />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('Database is locked');
+  });
+
   it('says when there are no trips', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(jsonResponse([])));
     renderWithProviders(<TripListPage />);
