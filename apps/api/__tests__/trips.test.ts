@@ -64,6 +64,12 @@ describe('trips API', () => {
     expect(res.body.error.details).toEqual([{ path: 'endDate', message: 'endDate must not be before startDate' }]);
   });
 
+  it('rejects a patch that would invert the dates', async () => {
+    const id = await createTrip(ctx);
+    const res = await ctx.api.patch(`/api/trips/${id}`).send({ startDate: '2026-08-01' }).expect(400);
+    expect(res.body.error.code).toBe('VALIDATION_ERROR');
+  });
+
   it('updates a trip', async () => {
     const id = await createTrip(ctx);
     const res = await ctx.api.patch(`/api/trips/${id}`).send({ name: 'Karwendel Traverse' }).expect(200);

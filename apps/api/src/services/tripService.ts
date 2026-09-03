@@ -1,5 +1,5 @@
 import type { Clock } from '../clock';
-import { notFound } from '../errors';
+import { HttpError, notFound } from '../errors';
 import type { Repositories } from '../repositories';
 import type { TripRow, TripRowPatch } from '../repositories/tripRepository';
 import type { CreateTripInput, TripDetailDto, TripDto, UpdateTripInput } from '../schemas/trip';
@@ -60,7 +60,7 @@ export class TripService {
   }
 
   update(id: number, input: UpdateTripInput): TripDto {
-    this.requireTrip(id);
+    const current = this.requireTrip(id);
     const patch: TripRowPatch = {};
     if (input.name !== undefined) patch.name = input.name;
     if (input.region !== undefined) patch.region = input.region;
@@ -68,6 +68,11 @@ export class TripService {
     if (input.endDate !== undefined) patch.end_date = input.endDate;
     if (input.notes !== undefined) patch.notes = input.notes;
 
+    const start = patch.start_date ?? current.start_date;
+    const end = patch.end_date ?? current.end_date;
+    if (end < start) {
+      throw new HttpError(400, 'VALIDATION_ERROR', 'endDate must not be before startDate');
+    }
     return toTripDto(this.repos.trips.update(id, patch) as TripRow);
   }
 
