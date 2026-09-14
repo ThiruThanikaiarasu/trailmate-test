@@ -10,6 +10,10 @@ export function shareRouter({ share }: Services): Router {
     res.status(201).json(share.create(idParam(req.params.id), req.body.ttlHours));
   });
 
+  router.delete('/trips/:id/share', (req, res) => {
+    res.json({ revoked: share.revokeAll(idParam(req.params.id)) });
+  });
+
   router.get('/share/:token', (req, res) => {
     res.json(share.resolve(req.params.token));
   });

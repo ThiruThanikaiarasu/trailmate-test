@@ -39,6 +39,14 @@ describe('share links API', () => {
     expect(res.body.error.code).toBe('NOT_FOUND');
   });
 
+  it('revokes every link of a trip', async () => {
+    const link = await ctx.api.post(`/api/trips/${tripId}/share`).send({});
+    await ctx.api.post(`/api/trips/${tripId}/share`).send({});
+    const res = await ctx.api.delete(`/api/trips/${tripId}/share`).expect(200);
+    expect(res.body).toEqual({ revoked: 2 });
+    await ctx.api.get(`/api/share/${link.body.token}`).expect(404);
+  });
+
   it('limits the lifetime to 30 days', async () => {
     await ctx.api.post(`/api/trips/${tripId}/share`).send({ ttlHours: 24 * 31 }).expect(400);
   });

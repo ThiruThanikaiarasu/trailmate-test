@@ -23,4 +23,8 @@ export class ShareLinkRepository {
   findByToken(token: string): ShareLinkRow | undefined {
     return this.db.prepare('SELECT * FROM share_links WHERE token = ?').get(token) as ShareLinkRow | undefined;
   }
+
+  deleteForTrip(tripId: number): number {
+    return this.db.prepare('DELETE FROM share_links WHERE trip_id = ?').run(tripId).changes;
+  }
 }

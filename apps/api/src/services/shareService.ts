@@ -56,4 +56,9 @@ export class ShareService {
       days: this.itinerary.listDays(trip.id),
     };
   }
+
+  revokeAll(tripId: number): number {
+    if (!this.repos.trips.findById(tripId)) throw notFound('Trip');
+    return this.repos.shareLinks.deleteForTrip(tripId);
+  }
 }
