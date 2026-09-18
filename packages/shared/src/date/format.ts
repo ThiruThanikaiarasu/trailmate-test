@@ -15,6 +15,16 @@ const INVALID_DATE: Record<Locale, string> = {
   de: 'Ungültiges Datum',
 };
 
+interface LocalePatterns {
+  date: string;
+  dayHeading: string;
+}
+
+const PATTERNS: Record<Locale, LocalePatterns> = {
+  en: { date: 'MMM d, yyyy', dayHeading: 'EEE, MMM d' },
+  de: { date: 'MM.dd.yyyy', dayHeading: 'EEE, dd.MM.' },
+};
+
 const pad = (value: number): string => String(value).padStart(2, '0');
 
 /**
@@ -53,13 +63,13 @@ export function formatPattern(date: Date, pattern: string, locale: Locale): stri
 export function formatDate(value: string | Date | null | undefined, locale: Locale): string {
   const date = parseIsoDate(value);
   if (!date) return INVALID_DATE[locale];
-  return formatPattern(date, locale === 'de' ? 'dd.MM.yyyy' : 'MMM d, yyyy', locale);
+  return formatPattern(date, PATTERNS[locale].date, locale);
 }
 
 export function formatDayHeading(value: string | Date, locale: Locale): string {
   const date = parseIsoDate(value);
   if (!date) return INVALID_DATE[locale];
-  return formatPattern(date, locale === 'de' ? 'EEE, dd.MM.' : 'EEE, MMM d', locale);
+  return formatPattern(date, PATTERNS[locale].dayHeading, locale);
 }
 
 export function formatDateRange(
