@@ -7,7 +7,7 @@ export const GEAR_CATEGORIES = [
   "clothing",
   "cooking",
   "water",
-  "navigation",
+  "electronics",
   "first-aid",
   "other",
 ] as const;

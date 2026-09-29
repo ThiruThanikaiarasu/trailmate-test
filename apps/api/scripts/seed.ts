@@ -43,7 +43,8 @@ for (const item of [
   { name: 'Hut sleeping bag liner', category: 'sleep' as const, weightGrams: 140 },
   { name: 'Rain jacket', category: 'clothing' as const, weightGrams: 310 },
   { name: 'Water bottle 1 l', category: 'water' as const, weightGrams: 180, quantity: 2 },
-  { name: 'Map Kompass 026', category: 'navigation' as const, weightGrams: 90 },
+  { name: 'Map Kompass 026', category: 'other' as const, weightGrams: 90 },
+  { name: 'Headlamp', category: 'electronics' as const, weightGrams: 75 },
   { name: 'Blister kit', category: 'first-aid' as const, weightGrams: 60 },
 ]) {
   services.gear.add(trip.id, item);
