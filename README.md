@@ -80,3 +80,25 @@ of shared pages. Expired links answer `410 Gone`.
 
 Days are numbered 1..n per trip and their dates are derived from the trip's start date. Deleting a
 day renumbers the following days.
+
+## API overview
+
+| Method | Path                                   |                                   |
+| ------ | -------------------------------------- | --------------------------------- |
+| GET    | `/api/trips`                           | list trips                        |
+| POST   | `/api/trips`                           | create a trip (+ owner)           |
+| GET    | `/api/trips/:id`                       | trip with counts and distance     |
+| PATCH  | `/api/trips/:id`                       | update a trip                     |
+| DELETE | `/api/trips/:id`                       | delete a trip                     |
+| GET    | `/api/trips/:id/days`                  | itinerary                         |
+| POST   | `/api/trips/:id/days`                  | add a day                         |
+| POST   | `/api/days/:dayId/waypoints`           | add a waypoint                    |
+| GET    | `/api/trips/:id/gear`                  | gear checklist                    |
+| PATCH  | `/api/gear/:gearId`                    | rename, change quantity, pack     |
+| GET    | `/api/trips/:id/participants`          | participants                      |
+| POST   | `/api/trips/:id/expenses`              | record an expense                 |
+| GET    | `/api/trips/:id/cost-split`            | who owes what                     |
+| POST   | `/api/trips/:id/share`                 | create a share link               |
+| GET    | `/api/share/:token`                    | shared (read-only) trip           |
+
+Errors always use `{ "error": { "code", "message", "details"? } }`.
