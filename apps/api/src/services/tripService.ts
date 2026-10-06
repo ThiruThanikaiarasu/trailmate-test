@@ -2,20 +2,11 @@ import type { Clock } from '../clock';
 import { HttpError, notFound } from '../errors';
 import type { Repositories } from '../repositories';
 import type { TripRow, TripRowPatch } from '../repositories/tripRepository';
-import type { CreateTripInput, TripDetailDto, TripDto, UpdateTripInput } from '../schemas/trip';
+import type { CreateTripInput, TripDto, UpdateTripInput } from '../schemas/trip';
+import { serializeTrip, serializeTripDetail } from '../serializers/tripSerializer';
 import type { ItineraryService } from './itineraryService';
 
 export type Transaction = <T>(work: () => T) => T;
-
-export const toTripDto = (row: TripRow): TripDto => ({
-  id: row.id,
-  name: row.name,
-  region: row.region,
-  startDate: row.start_date,
-  endDate: row.end_date,
-  notes: row.notes,
-  createdAt: row.created_at,
-});
 
 export class TripService {
   constructor(
@@ -26,21 +17,20 @@ export class TripService {
   ) {}
 
   list(): TripDto[] {
-    return this.repos.trips.list().map(toTripDto);
+    return this.repos.trips.list().map(serializeTrip);
   }
 
-  get(id: number): TripDetailDto {
+  get(id: number) {
     const row = this.requireTrip(id);
     const days = this.itinerary.listDays(id);
     const gear = this.repos.gear.counts(id);
-    return {
-      ...toTripDto(row),
+    return serializeTripDetail(row, {
       dayCount: days.length,
       participantCount: this.repos.participants.countByTrip(id),
       gearCount: gear.total,
       packedCount: gear.packed,
       totalDistanceMeters: days.reduce((sum, day) => sum + day.distanceMeters, 0),
-    };
+    });
   }
 
   /** Creates the trip and its owner as the first participant, atomically. */
@@ -55,7 +45,7 @@ export class TripService {
         created_at: this.clock.now().toISOString(),
       });
       this.repos.participants.insert(row.id, input.ownerName, null, true);
-      return toTripDto(row);
+      return serializeTrip(row);
     });
   }
 
@@ -73,7 +63,7 @@ export class TripService {
     if (end < start) {
       throw new HttpError(400, 'VALIDATION_ERROR', 'endDate must not be before startDate');
     }
-    return toTripDto(this.repos.trips.update(id, patch) as TripRow);
+    return serializeTrip(this.repos.trips.update(id, patch) as TripRow);
   }
 
   remove(id: number): void {
