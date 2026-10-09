@@ -14,13 +14,15 @@ export function GearChecklist({ items: serverItems, onToggle, onRemove, onAdd }:
   const [items, setItems] = useState(serverItems);
   const [name, setName] = useState('');
   const [category, setCategory] = useState<GearCategory>('other');
+  const [packedVersion, setPackedVersion] = useState(0);
 
   useEffect(() => setItems(serverItems), [serverItems]);
 
-  const packedCount = useMemo(() => items.filter((item) => item.packed).length, [items]);
+  const packedCount = useMemo(() => items.filter((item) => item.packed).length, [packedVersion]);
 
   const toggle = (item: GearItem) => {
     setItems((current) => current.map((i) => (i.id === item.id ? { ...i, packed: !i.packed } : i)));
+    setPackedVersion((version) => version + 1);
     onToggle(item.id, !item.packed);
   };
 
