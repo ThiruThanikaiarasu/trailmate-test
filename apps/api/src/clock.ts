@@ -9,6 +9,9 @@ export const systemClock: Clock = {
   now: () => new Date(),
 };
 
+/** Whole seconds since the Unix epoch, for compact integer timestamps in the database. */
+export const epochSeconds = (clock: Clock): number => Math.floor(clock.now().getTime() / 1000);
+
 export type TokenGenerator = () => string;
 
 export const randomToken: TokenGenerator = () => randomBytes(18).toString('base64url');

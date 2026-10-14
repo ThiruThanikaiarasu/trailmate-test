@@ -1,4 +1,4 @@
-import type { Clock, TokenGenerator } from '../clock';
+import { type Clock, epochSeconds, type TokenGenerator } from '../clock';
 import { gone, notFound } from '../errors';
 import type { Repositories } from '../repositories';
 import type { ShareLinkDto, SharedTripDto } from '../schemas/share';
@@ -31,7 +31,7 @@ export class ShareService {
       trip_id: tripId,
       token: this.newToken(),
       expires_at: now + ttlHours * HOUR_MS,
-      created_at: now,
+      created_at: epochSeconds(this.clock),
     });
     return {
       token: row.token,
@@ -43,7 +43,7 @@ export class ShareService {
   resolve(token: string): SharedTripDto {
     const link = this.repos.shareLinks.findByToken(token);
     if (!link) throw notFound('Share link');
-    if (link.expires_at <= this.clock.now().getTime()) {
+    if (link.expires_at <= epochSeconds(this.clock)) {
       throw gone('SHARE_LINK_EXPIRED', 'This share link has expired');
     }
     const trip = this.repos.trips.findById(link.trip_id);
